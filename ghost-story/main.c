@@ -110,9 +110,9 @@ char * readline()
 {
     char buffer[20];
     char * input = buffer;
-    size_t size = 32;
+    int size = 32;
 
-    getline(&input, &size, stdin);
+    fgets(input, size, stdin);
     input[strcspn(input, "\r\n")] = 0; // REMOVES NEWLINE FROM GETLINE
     
     return input;
@@ -123,9 +123,9 @@ char * fWord()
 {
     char buffer[20];
     char * input = buffer;
-    size_t size = 32;
+    int size = 32;
 
-    getline(&input, &size, stdin);
+    fgets(input, size, stdin);
     input = strtok(input, " ");
     input[strcspn(input, "\r\n")] = 0; // REMOVES NEWLINE FROM GETLINE
     
