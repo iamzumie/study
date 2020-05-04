@@ -8,11 +8,9 @@ void startUp();
 int input();
 char * readLine();
 char * fWord();
-void use();
-void search();
-void open();
-void go();
-void map();
+void action();
+void function();
+void showmap();
 
 // INIT
 int answer;
@@ -64,16 +62,8 @@ int main()
     printf("\n[!] To use a lighter, type 'USE' and hit enter. Then type 'LIGHTER'.\n\n");
     getchar(); // REMOVES NEWLINE
 
-    use(); // LOOKS AT USE FIRST
-    while(1) { // LIGHTER
-        
-        read = fWord();
-        
-        if ((strcasecmp(read, "lighter") == 0)) 
-            break;
-        else
-            printf("I don't know the word %s.\n\n", read);
-    }
+    action("USE"); // LOOKS AT USE FIRST
+    function("USE", "lighter");
 
 
     // FOURTH QUESTION
@@ -95,24 +85,13 @@ int main()
             printf("While looking for candles you also found a map which seems to be like the floorplan.\n");
             
     // MAP     
-    printf("\n[!] \"Use\" map where you want to go to:\n");
+    printf("\n[!] \"Use\" map where you want to go to:\n\n");
     getchar();
-    use(); // LOOKS AT USE FIRST
-    // MAP
-    while (1)
-    {
-        read = fWord();
-        if(strcasecmp(read, "map") == 0)
-        {
-            map();
-            break;
-        }
-        else
-            printf("i don't know the word %s", read);        
-    }
+    action("USE"); // LOOKS AT USE FIRST
+    function("USE", "map");
+    showmap();
 
-    printf("MAP:\n");
-    printf("Choose where you want to go to:\n");
+    printf("\nChoose where you want to go to:\n");
     printf("[1] KITCHEN     [2] DINING ROOM     [3] HAL     [4] LIVING ROOM     [5] UPSTAIRS\n\n");
     do
     {
@@ -133,11 +112,13 @@ int main()
                 printf("LIVING ROOM\n\n");
                 break;
             case 5:
-                printf("UPSTAIRS\n");
                 printf("We haven't discovered all locations below yet.\n\n");
-            default: printf("Answer %i is not an option.\n\n", answer); break;
+                break;
+            default: 
+                printf("Answer %i is not an option.\n\n", answer); 
+                break;
         }
-    } while (answer < 1 ||answer > 4);
+    } while (answer < 1 || answer > 4);
         printf("Succes!\n");
     
 }
@@ -152,22 +133,6 @@ void command() {
     printf(">  ");
 }
 
-// USE
-void use() 
-{
-    while(1) {
-        command();
-        read = fWord();
-        if ((strcasecmp(read, "use") == 0)) 
-        {
-            printf("USE:  ");
-            break;
-        }
-        else
-            printf("I don't know the word %s.\n\n", read);
-    }
-}
-
 // INPUT
 int input(int *answer)
 {
@@ -177,46 +142,33 @@ int input(int *answer)
     return *answer;
 }
 
-// SEARCH FUNCTION
-void search() 
+// ACTION
+void action(char * input) 
 {
-    getchar(); // REMOVES ANY NEWLINE FROM BUFFER
-    while(1) 
-    {
+    while(1) {
         command();
         read = fWord();
-        if ((strcasecmp(read, "search") == 0)) 
+        if ((strcasecmp(read, input) == 0)) 
+        {
+            printf("%s:  ", input);
             break;
+        }
         else
             printf("I don't know the word %s.\n\n", read);
     }
 }
 
-// OPEN FUNCTION
-void open() 
+// FUNCTION
+void function(char * cmd, char * input) 
 {
     while(1) 
     {
-        command();
         read = fWord();
-        if ((strcasecmp(read, "open") == 0)) 
+        if ((strcasecmp(read, input) == 0)) 
             break;
         else
             printf("I don't know the word %s.\n\n", read);
-    }
-}
-
-// OPEN FUNCTION
-void go() 
-{
-    while(1) 
-    {
-        command();
-        read = fWord();
-        if ((strcasecmp(read, "go") == 0)) 
-            break;
-        else
-            printf("I don't know the word %s.\n\n", read);
+            printf("%s:  ", cmd);
     }
 }
 
@@ -247,10 +199,10 @@ char * fWord()
     return input;
 }
 
-void map()
+void showmap()
 {
         puts(
-        "\t\t\tWHIPSTAFF MANOR\n\n"
+        "\n\n"
         "   ______________________________________\n"
         "  /            |        | UP |           \\ \n"
         " |             | TOILET |----|            |\n"
@@ -271,9 +223,9 @@ void startUp()
     // TITLE SCREEN
     printf("\n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    printf("\t\t\tG H O S T    S T O R Y\n");
+    printf("\t\t\tG H O S T   S T O R Y\n");
     printf("\n");
-    printf("\t\t\tA TEXT-ADVENTURE GAME    \n");
+    printf("\t\tA   T E X T - A D V E N T U R E  G A M E    \n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n");
 
     // INTRODUCTION
