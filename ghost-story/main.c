@@ -3,7 +3,6 @@
 #include <ctype.h>
 
 // FUNCTIONS
-int input();
 void command();
 void startUp();
 void action();
@@ -24,17 +23,25 @@ int main()
     // TITLE SCREEN + INTRODUCTION
     startUp();
 
-
     // FIRST QUESTION
     printf("[1] look around\t [2] go north\t [3] go south\n\n");
     do {
-        input(&answer);
-        switch(answer)
+        command();
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, "%d", &answer);
+
+        if (!answer) // CHECK IF 
+            printf("Come again?\n\n");
+        else
         {
-            case 1: printf("It's pouring, maybe it's better if we go somewhere to hide.\n\n"); break;
-            case 2: printf("You go towards the mansion.\nThere's a sign on the door that says: \"Begone humans! Leave the dead in peace!\"\n\n"); break;
-            case 3: printf("It's too dark going south, it's freezing outside.\n\n"); break;
-            default: printf("Answer %i is not an option.\n\n", answer); break;
+            switch(answer)
+            {
+                case 1: printf("It's pouring, maybe it's better if we go somewhere to hide.\n\n"); break;
+                case 2: printf("You go towards the mansion.\nThere's a sign on the door that says: \"Begone humans! Leave the dead in peace!\"\n\n"); break;
+                case 3: printf("It's too dark going south, it's freezing outside.\n\n");
+                        break;
+                default: printf("Answer %i is not an option.\n\n", answer); break;
+            }
         }
     } while (answer != 2);
 
@@ -44,7 +51,9 @@ int main()
 
     do {
         command();
-        scanf("%i", &answer);
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, "%i", &answer);
+
         switch(answer)
         {
             case 1: printf("It's locked. You need to find a key.\n\n"); break;
@@ -60,7 +69,6 @@ int main()
     // THIRD QUESTION
     printf("We could use some light..\n");
     printf("\n[!] To use a lighter, type 'USE' and hit enter. Then type 'LIGHTER'.\n\n");
-    getchar(); // REMOVES NEWLINE
 
     action("USE"); // LOOKS AT USE FIRST
     function("USE", "lighter");
@@ -73,7 +81,9 @@ int main()
 
     do {
         command();
-        scanf("%i", &answer);
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, "%i", &answer);
+
         switch(answer)
         {
             case 1: printf("Aaah that felt good!\n\n"); break;
@@ -86,7 +96,6 @@ int main()
 
     // MAP
     printf("\n[!] \"Use\" map where you want to go to:\n\n");
-    getchar();
     action("USE"); // LOOKS AT USE FIRST
     function("USE", "map");
     showmap();
@@ -96,7 +105,9 @@ int main()
     do
     {
         command();
-        scanf("%i", &answer);
+        fgets(buffer, sizeof(buffer), stdin);
+        sscanf(buffer, "%i", &answer);
+        
         switch(answer)
         {
             case 1:
@@ -125,21 +136,11 @@ int main()
 
 
 
-
 // FUNCTIONS
 
 // -->
 void command() {
     printf(">  ");
-}
-
-// INPUT
-int input(int *answer)
-{
-    command();
-    scanf("%i", &*answer);
-
-    return *answer;
 }
 
 // ACTION
@@ -148,13 +149,15 @@ void action(char * input)
     while(1) {
         command();
         read = fWord();
-        if ((strcasecmp(read, input) == 0))
+        if (read)
         {
-            printf("%s:  ", input);
-            break;
-        }
+            if ((strcasecmp(read, input) == 0))
+                break;
+            else
+                printf("I don't know the word %s.\n\n", read);                
+        } 
         else
-            printf("I don't know the word %s.\n\n", read);
+            printf("Come again?\n\n");
     }
 }
 
@@ -163,14 +166,20 @@ void function(char * cmd, char * input)
 {
     while(1)
     {
+        printf("%s:  ", cmd);
         read = fWord();
-        if ((strcasecmp(read, input) == 0))
-            break;
+        if (read)
+        {
+            if ((strcasecmp(read, input) == 0))
+                break;
+            else
+                printf("I don't know the word %s.\n\n", read);
+        }
         else
-            printf("I don't know the word %s.\n\n", read);
-            printf("%s:  ", cmd);
+            printf("Come again?\n\n");      
     }
 }
+
 
 // ONLY READ THE FIRST WORD
 char * fWord()
@@ -208,9 +217,9 @@ void startUp()
     // TITLE SCREEN
     printf("\n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
-    printf("\t\t\tG H O S T   S T O R Y\n");
+    printf("\t\t\t G H O S T   M A N O R\n");
     printf("\n");
-    printf("\t\tA   T E X T - A D V E N T U R E  G A M E    \n");
+    printf("\t\tA  T E X T - A D V E N T U R E  G A M E    \n");
     printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n\n");
 
     // INTRODUCTION
