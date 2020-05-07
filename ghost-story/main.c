@@ -30,7 +30,7 @@ int main()
         fgets(buffer, sizeof(buffer), stdin);
         sscanf(buffer, "%d", &answer);
 
-        if (!answer) // CHECK IF 
+        if (!answer) // CHECK IF EMPTY
             printf("Come again?\n\n");
         else
         {
